@@ -32,13 +32,15 @@ network = Network(status_neopixel=board.NEOPIXEL, debug=False)
 font_thumb = bitmap_font.load_font('fonts/tom-thumb.bdf')
 
 wxgroup = displayio.Group()
-lbl_greet = Label(font=terminalio.FONT, x=0, y=3, color=0xFF6600, text='Helo world')
-lbl_temp = Label(font=terminalio.FONT, x=18, y=15, color=0xFFCC00)
+lbl_greet = Label(font=terminalio.FONT, x=0, y=3, color=0xFF6600)
+lbl_temp = Label(font=terminalio.FONT, x=18, y=15, color=0xBB56FF)
+lbl_feel = Label(font=font_thumb, x=8, y=18, color=0xBB56FF)
 lbl_hi = Label(font=font_thumb, x=32, y=13, color=0xFFCC00)
 lbl_lo = Label(font=font_thumb, x=32, y=20, color=0xFFCC00)
 lbl_time = Label(font=terminalio.FONT, x=0, y=27, color=0xBB56FF)
 wxgroup.append(lbl_greet)
 wxgroup.append(lbl_temp)
+wxgroup.append(lbl_feel)
 wxgroup.append(lbl_hi)
 wxgroup.append(lbl_lo)
 wxgroup.append(lbl_time)
@@ -62,6 +64,7 @@ def update_weather(value):
 
     # TODO: Accomodate extra character for extreme temperatures.
     lbl_temp.text = '{:2d}'.format(round(value['current']['temp']))
+    lbl_feel.text = '{:2d}'.format(round(value['current']['feels_like']))
     lbl_hi.text = '{:2d}'.format(round(hi))
     lbl_lo.text = '{:2d}'.format(round(lo))
 
@@ -109,6 +112,14 @@ while True:
             continue
 
     now = time.localtime(time.time() + timezone_offset)
-    lbl_time.text = "{:2d}:{:02d}".format(now.tm_hour, now.tm_min)
+    if now.tm_hour >= 17 and now.tm_hour < 19:
+        lbl_greet.text = 'Happy hour!'
+    elif now.tm_hour >= 19 and now.tm_hour < 22:
+        lbl_greet.text = 'Wind down'
+    elif now.tm_hour == 20 and now.tm_min < 30:
+        lbl_greet.text = 'Tuck in!'
+    else:
+        lbl_greet.text = 'Helo world'
+    lbl_time.text = "{:2d}:{:02d}".format(now.tm_hour%12, now.tm_min)
     display.show(wxgroup)
     time.sleep(1)

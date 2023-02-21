@@ -116,7 +116,7 @@ while True:
         lbl_greet.text = 'Happy hour!'
     elif now.tm_hour >= 19 and now.tm_hour < 22:
         lbl_greet.text = 'Wind down'
-    elif now.tm_hour == 20 and now.tm_min < 30:
+    elif now.tm_hour == 22 and now.tm_min < 30:
         lbl_greet.text = 'Tuck in!'
     else:
         lbl_greet.text = 'Helo world'

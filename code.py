@@ -134,7 +134,7 @@ while True:
     now = time.localtime(now_unix + timezone_offset)
 
     # TODO: Sleep smarter.
-    if ((now.tm_hour == 22 and now.tm_min >= 30) or
+    if ((now.tm_hour == 22 and now.tm_min >= 45) or
         (now.tm_hour == 23) or
         (now.tm_hour < 7)):
         display.show(mtgroup)
@@ -153,13 +153,13 @@ while True:
       elif now.tm_hour < 17:
           days = ((secrets['event_time'] - now_unix) // (60 * 60 * 24)) + 1
           lbl_greet.text = '{:3d} to {}!'.format(days, secrets['event_name'])
-       elif now.tm_hour < 19:
+      elif now.tm_hour < 19:
           lbl_greet.text = 'Happy hour!'
       elif now.tm_hour < 20:
           lbl_greet.text = 'Dinnertime!'
       elif now.tm_hour < 22:
           lbl_greet.text = 'Wind down!'
-      elif now.tm_hour == 22 and now.tm_min < 30:
+      elif now.tm_hour == 22 and now.tm_min < 45:
           lbl_greet.text = 'Tuck in!'
       else:
           lbl_greet.text = 'Helo world!'

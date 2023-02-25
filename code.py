@@ -163,6 +163,9 @@ while True:
           lbl_greet.text = 'Tuck in!'
       else:
           lbl_greet.text = 'Helo world!'
-      lbl_time.text = "{:2d}:{:02d}".format(now.tm_hour%12, now.tm_min)
+      hour = now.tm_hour%12
+      if hour == 0:
+          hour = 12
+      lbl_time.text = "{:2d}:{:02d}".format(hour, now.tm_min)
       display.show(wxgroup)
       time.sleep(1)

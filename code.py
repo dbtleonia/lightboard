@@ -58,7 +58,7 @@ def update_weather(value, show_today):
         rcolor = 0x5D2B7F
     else:
         for_day = (now.tm_wday + 1) % 7  # tomorrow
-        rcolor = 0xBB56FF
+        rcolor = 0xFFCC00
     temps = []
     poppx = []
     for hour in value['hourly']:

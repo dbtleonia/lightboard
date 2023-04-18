@@ -136,16 +136,13 @@ while True:
     now_unix = time.time()
     now = time.localtime(now_unix + timezone_offset)
 
-    tg_cat.hidden = now.tm_sec >= 5
+    tg_cat.hidden = now.tm_sec >= 0  # disabled for now
 
-    # TODO: Sleep smarter.
-    if ((now.tm_hour == 22 and now.tm_min >= 45) or
-        (now.tm_hour == 23) or
-        (now.tm_hour < 7)):
-        display.show(mtgroup)
-        time.sleep(60)
-    else:
-      if now.tm_hour < 12:
+    if now.tm_hour >= 7 and now.tm_hour < 17:
+        if now.tm_hour >= 12 and 'event_time' in secrets:
+          days = ((secrets['event_time'] - now_unix) // (60 * 60 * 24)) + 1
+          lbl_greet.text = '{:3d} to {}!'.format(days, secrets['event_name'])
+        else:
           lbl_greet.text = [
               'Kali mera!',  # Monday
               'Bonjour!',
@@ -155,22 +152,19 @@ while True:
               'Swan time!',
               'Buongiorno!',
           ][now.tm_wday]
-      elif now.tm_hour < 17:
-          days = ((secrets['event_time'] - now_unix) // (60 * 60 * 24)) + 1
-          lbl_greet.text = '{:3d} to {}!'.format(days, secrets['event_name'])
-      elif now.tm_hour < 19:
-          lbl_greet.text = 'Happy hour!'
-      elif now.tm_hour < 20:
-          lbl_greet.text = 'Dinnertime!'
-      elif now.tm_hour < 22:
-          lbl_greet.text = 'Wind down!'
-      elif now.tm_hour == 22 and now.tm_min < 45:
-          lbl_greet.text = 'Tuck in!'
-      else:
-          lbl_greet.text = 'Helo world!'
-      hour = now.tm_hour%12
-      if hour == 0:
-          hour = 12
-      lbl_time.text = "{:2d}:{:02d}".format(hour, now.tm_min)
-      display.show(wxgroup)
-      time.sleep(1)
+    elif now.tm_hour < 19:
+        lbl_greet.text = 'Happy hour!'
+    elif now.tm_hour < 20:
+        lbl_greet.text = 'Dinnertime!'
+    elif now.tm_hour < 22:
+        lbl_greet.text = 'Wind down!'
+    elif now.tm_hour < 23:
+        lbl_greet.text = 'Tuck in!'
+    else:
+        lbl_greet.text = 'Zzzzz...'
+    hour = now.tm_hour%12
+    if hour == 0:
+        hour = 12
+    lbl_time.text = "{:2d}:{:02d}".format(hour, now.tm_min)
+    display.show(wxgroup)
+    time.sleep(1)

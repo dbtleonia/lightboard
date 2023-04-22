@@ -152,13 +152,13 @@ while True:
               'Swan time!',
               'Buongiorno!',
           ][now.tm_wday]
-    elif now.tm_hour < 19:
+    elif now.tm_hour >= 17 and now.tm_hour < 19:
         lbl_greet.text = 'Happy hour!'
-    elif now.tm_hour < 20:
+    elif now.tm_hour == 19:
         lbl_greet.text = 'Dinnertime!'
-    elif now.tm_hour < 22:
+    elif now.tm_hour >= 20 and now.tm_hour < 22:
         lbl_greet.text = 'Wind down!'
-    elif now.tm_hour < 23:
+    elif now.tm_hour == 22:
         lbl_greet.text = 'Tuck in!'
     else:
         lbl_greet.text = 'Zzzzz...'

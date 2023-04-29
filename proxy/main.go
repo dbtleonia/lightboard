@@ -11,10 +11,15 @@ type Current struct {
 	FeelsLike float64 `json:"feels_like"`
 }
 
+type Rain struct {
+	OneH float64 `json:"1h"`
+}
+
 type Hourly struct {
 	Dt   int     `json:"dt"`
 	Temp float64 `json:"temp"`
 	Pop  float64 `json:"pop"`
+	Rain Rain    `json:"rain"`
 }
 
 type Message struct {

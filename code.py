@@ -61,11 +61,25 @@ def update_weather(value, show_today):
         rcolor = 0xFFCC00
     temps = []
     poppx = []
+    rain_colors = []
+    # TODO: Verify existence of these fields.
     for hour in value['hourly']:
         t = time.localtime(hour['dt'] + timezone_offset)
         if t.tm_wday == for_day:
             temps.append(hour['temp'])
             poppx.append(round(hour['pop']*10))
+            if 'rain' not in hour or '1h' not in hour['rain']:
+                rain_colors.append(0x000000)
+            else:
+                mm = hour['rain']['1h']
+                if mm < 2.5:
+                    rain_colors.append(0x4275C4) # light
+                elif mm < 10.0:
+                    rain_colors.append(0x284777) # moderate
+                elif mm < 50.0:
+                    rain_colors.append(0x1E3559) # heavy
+                else:
+                    rain_colors.append(0xFF0000) # violent
     lo = min(temps)
     hi = max(temps)
     bucket = (hi - lo) / 10
@@ -96,7 +110,7 @@ def update_weather(value, show_today):
         tempgroup.append(Line(i, 10-n, i, 10-b, rcolor))
 
     for i, pop in enumerate(poppx):
-        raingroup.append(Line(i, 10-pop, i, 10, 0x1E3559))
+        raingroup.append(Line(i, 10-pop, i, 10, rain_colors[i]))
 
 localtime_refresh = None
 weather_refresh = None
@@ -138,20 +152,22 @@ while True:
 
     tg_cat.hidden = now.tm_sec >= 0  # disabled for now
 
-    if now.tm_hour >= 7 and now.tm_hour < 17:
-        if now.tm_hour >= 12 and 'event_time' in secrets:
-          days = ((secrets['event_time'] - now_unix) // (60 * 60 * 24)) + 1
-          lbl_greet.text = '{:3d} to {}!'.format(days, secrets['event_name'])
-        else:
-          lbl_greet.text = [
-              'Kali mera!',  # Monday
-              'Bonjour!',
-              "G'morning!",
-              'Bom dia!',
-              'Co-brkfst!',
-              'Swan time!',
+    if now.tm_hour >= 7 and now.tm_hour < 12:
+        lbl_greet.text = [
+            'Kali mera!',  # Monday
+            'Bonjour!',
+            "G'morning!",
+            'Bom dia!',
+            'Co-brkfst!',
+            'Swan time!',
               'Buongiorno!',
-          ][now.tm_wday]
+        ][now.tm_wday]
+    elif now.tm_hour >= 12 and now.tm_hour < 17:
+        if 'event_time' in secrets:
+            days = ((secrets['event_time'] - now_unix) // (60 * 60 * 24)) + 1
+            lbl_greet.text = '{:3d} to {}!'.format(days, secrets['event_name'])
+        else:
+            lbl_greet.text = 'Boa tarde!'
     elif now.tm_hour >= 17 and now.tm_hour < 19:
         lbl_greet.text = 'Happy hour!'
     elif now.tm_hour == 19:

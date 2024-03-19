@@ -29,7 +29,7 @@ matrix = Matrix()
 display = matrix.display
 network = Network()
 
-cat = displayio.OnDiskBitmap('bmps/calico.bmp')
+# cat = displayio.OnDiskBitmap('bmps/calico.bmp')
 font_thumb = bitmap_font.load_font('fonts/tom-thumb.bdf')
 
 mtgroup = displayio.Group()
@@ -40,14 +40,14 @@ lbl_feel = Label(font=font_thumb, x=8, y=18, color=0xBB56FF)
 lbl_hi = Label(font=font_thumb, x=32, y=13)
 lbl_lo = Label(font=font_thumb, x=32, y=20)
 lbl_time = Label(font=terminalio.FONT, x=0, y=27, color=0xBB56FF)
-tg_cat = displayio.TileGrid(cat, pixel_shader=cat.pixel_shader, x=31, y=23)
+# tg_cat = displayio.TileGrid(cat, pixel_shader=cat.pixel_shader, x=31, y=23)
 wxgroup.append(lbl_greet)
 wxgroup.append(lbl_temp)
 wxgroup.append(lbl_feel)
 wxgroup.append(lbl_hi)
 wxgroup.append(lbl_lo)
 wxgroup.append(lbl_time)
-wxgroup.append(tg_cat)
+# wxgroup.append(tg_cat)
 wxgroup.append(displayio.Group()) # for temp graph
 wxgroup.append(displayio.Group()) # for rain graph
 
@@ -150,7 +150,7 @@ while True:
     now_unix = time.time()
     now = time.localtime(now_unix + timezone_offset)
 
-    tg_cat.hidden = now.tm_sec >= 0  # disabled for now
+    # tg_cat.hidden = now.tm_sec >= 0  # disabled for now
 
     if now.tm_hour >= 7 and now.tm_hour < 12:
         lbl_greet.text = [
@@ -182,5 +182,5 @@ while True:
     if hour == 0:
         hour = 12
     lbl_time.text = "{:2d}:{:02d}".format(hour, now.tm_min)
-    display.show(wxgroup)
+    display.root_group = wxgroup
     time.sleep(1)
